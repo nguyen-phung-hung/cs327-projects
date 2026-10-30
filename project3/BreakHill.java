@@ -11,7 +11,7 @@
 public class BreakHill {
     public static void main(String[] args) {
         String ct = "HDHNXZHFGWVKPOBOHFCBKYWGATXUNNOXJFUUXZLUDXLKECNOPINYJRAQYOXPVKTMTBUELRNTKOCBKYXANTHNKIHFOJ";
-        int[] cipher = HillCipher.toInts(ct);
+        int[] cipher = OfosuTuffourKwameWithNguyenSeanHillCipher.toNumbers(ct);
         String[] common = { "THE", "AND", "ING", "ENT", "ION", "HER", "FOR", "THA" };
 
         int highestEnglishScore = -1;
@@ -23,12 +23,12 @@ public class BreakHill {
                 for (int c = 0; c < 26; c++)
                     for (int d = 0; d < 26; d++) {
                         int det = ((a * d - b * c) % 26 + 26) % 26;
-                        if (HillCipher.xgcd(det, 26) == -1) {
+                        if (OfosuTuffourKwameWithNguyenSeanHillCipher.xgcd(det, 26) == -1) {
                             continue;
                         }
                         int[][] enc = { { a, b }, { c, d } };
-                        int[][] dec = HillCipher.findDecryptionKey(enc);
-                        String candidateText = HillCipher.toLetters(HillCipher.decrypt(cipher, dec));
+                        int[][] dec = OfosuTuffourKwameWithNguyenSeanHillCipher.findDecryptionKey(enc);
+                        String candidateText = OfosuTuffourKwameWithNguyenSeanHillCipher.toLetters(OfosuTuffourKwameWithNguyenSeanHillCipher.decrypt(cipher, dec));
                         int englishScore = 0;
                         for (String t : common) {
                             for (int i = candidateText.indexOf(t); i >= 0; i = candidateText.indexOf(t, i + 1)) {
@@ -42,7 +42,7 @@ public class BreakHill {
                         }
                     }
 
-        int[][] crackedDecKey = HillCipher.findDecryptionKey(crackedEncKey);
+        int[][] crackedDecKey = OfosuTuffourKwameWithNguyenSeanHillCipher.findDecryptionKey(crackedEncKey);
 
         System.out.println("Encryption key:");
         System.out.println("[ " + crackedEncKey[0][0] + "  " + crackedEncKey[0][1] + " ]");
