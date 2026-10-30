@@ -1,0 +1,55 @@
+/**
+ *
+ * Bonus Question - Kwame, Sean
+ *
+ *
+ *
+ */
+
+
+
+public class BreakHill {
+    public static void main(String[] args) {
+        String ct = "HDHNXZHFGWVKPOBOHFCBKYWGATXUNNOXJFUUXZLUDXLKECNOPINYJRAQYOXPVKTMTBUELRNTKOCBKYXANTHNKIHFOJ";
+        int[] cipher = HillCipher.toInts(ct);
+        String[] common = { "THE", "AND", "ING", "ENT", "ION", "HER", "FOR", "THA" };
+
+        int highestEnglishScore = -1;
+        int[][] crackedEncKey = null;
+        String crackedPlaintext = "";
+
+        for (int a = 0; a < 26; a++)
+            for (int b = 0; b < 26; b++)
+                for (int c = 0; c < 26; c++)
+                    for (int d = 0; d < 26; d++) {
+                        int det = ((a * d - b * c) % 26 + 26) % 26;
+                        if (HillCipher.xgcd(det, 26) == -1) {
+                            continue;
+                        }
+                        int[][] enc = { { a, b }, { c, d } };
+                        int[][] dec = HillCipher.findDecryptionKey(enc);
+                        String candidateText = HillCipher.toLetters(HillCipher.decrypt(cipher, dec));
+                        int englishScore = 0;
+                        for (String t : common) {
+                            for (int i = candidateText.indexOf(t); i >= 0; i = candidateText.indexOf(t, i + 1)) {
+                                englishScore++;
+                            }
+                        }
+                        if (englishScore > highestEnglishScore) {
+                            highestEnglishScore = englishScore;
+                            crackedEncKey = enc;
+                            crackedPlaintext = candidateText;
+                        }
+                    }
+
+        int[][] crackedDecKey = HillCipher.findDecryptionKey(crackedEncKey);
+
+        System.out.println("Encryption key:");
+        System.out.println("[ " + crackedEncKey[0][0] + "  " + crackedEncKey[0][1] + " ]");
+        System.out.println("[ " + crackedEncKey[1][0] + "  " + crackedEncKey[1][1] + " ]");
+        System.out.println("Decryption key:");
+        System.out.println("[ " + crackedDecKey[0][0] + "  " + crackedDecKey[0][1] + " ]");
+        System.out.println("[ " + crackedDecKey[1][0] + "  " + crackedDecKey[1][1] + " ]");
+        System.out.println("Plaintext: " + crackedPlaintext);
+    }
+}
